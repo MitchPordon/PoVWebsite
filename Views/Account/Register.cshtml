@@ -1,0 +1,29 @@
+﻿@model PoVWebsite.Models.User
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Register</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Register</legend>
+        @Html.LabelFor(Model => Model.username)
+        @Html.TextBoxFor(m=>m.username)
+        @Html.ValidationMessageFor(m=>m.username)
+        <br />
+        @Html.LabelFor(Model => Model.email)
+        @Html.TextBoxFor(m=>m.email)
+        @Html.ValidationMessageFor(m=>m.email)
+        <br />
+        @Html.LabelFor(Model => Model.password)
+        @Html.PasswordFor(m=>m.password)
+        @Html.ValidationMessageFor(m=>m.password)
+        <br />
+        <input type="submit" value="Register" />
+    </fieldset>
+}

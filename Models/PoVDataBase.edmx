@@ -1,0 +1,351 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="PoVModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="PoVModelStoreContainer">
+          <EntitySet Name="Available" EntityType="PoVModel.Store.Available" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Pictures" EntityType="PoVModel.Store.Pictures" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="PushContact" EntityType="PoVModel.Store.PushContact" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Tokens" EntityType="PoVModel.Store.Tokens" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Users" EntityType="PoVModel.Store.Users" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Available_Users" Association="PoVModel.Store.FK_Available_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Available" EntitySet="Available" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pictures_Users" Association="PoVModel.Store.FK_Pictures_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Pictures" EntitySet="Pictures" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PushContact_Users" Association="PoVModel.Store.FK_PushContact_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="PushContact" EntitySet="PushContact" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tokens_Users" Association="PoVModel.Store.FK_Tokens_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Tokens" EntitySet="Tokens" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Available">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="start" Type="smalldatetime" Nullable="false" />
+          <Property Name="end" Type="smalldatetime" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="Pictures">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="bytes" Type="varbinary(max)" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="half_size" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="PushContact">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="phone_uri" Type="varchar(max)" Nullable="false" />
+          <Property Name="phone" Type="varchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Tokens">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="public_key" Type="varchar(max)" Nullable="false" />
+          <Property Name="expires" Type="datetime2" Nullable="false" StoreGeneratedPattern="None" />
+          <Property Name="auth_token" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="email" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="password" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="role" Type="varchar" MaxLength="50" />
+          <Property Name="account" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="email_message" Type="bit" Nullable="false" />
+          <Property Name="text_message" Type="bit" Nullable="false" />
+          <Property Name="app_message" Type="bit" Nullable="false" />
+          <Property Name="changed" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Available_Users">
+          <End Role="Users" Type="PoVModel.Store.Users" Multiplicity="1" />
+          <End Role="Available" Type="PoVModel.Store.Available" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Available">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pictures_Users">
+          <End Role="Users" Type="PoVModel.Store.Users" Multiplicity="1" />
+          <End Role="Pictures" Type="PoVModel.Store.Pictures" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Pictures">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PushContact_Users">
+          <End Role="Users" Type="PoVModel.Store.Users" Multiplicity="1" />
+          <End Role="PushContact" Type="PoVModel.Store.PushContact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PushContact">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tokens_Users">
+          <End Role="Users" Type="PoVModel.Store.Users" Multiplicity="1" />
+          <End Role="Tokens" Type="PoVModel.Store.Tokens" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Tokens">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PoVModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="PoVEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Availables" EntityType="PoVModel.Available" />
+          <EntitySet Name="Users" EntityType="PoVModel.User" />
+          <AssociationSet Name="FK_Available_Users" Association="PoVModel.FK_Available_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Available" EntitySet="Availables" />
+          </AssociationSet>
+          <EntitySet Name="Pictures" EntityType="PoVModel.Picture" />
+          <AssociationSet Name="FK_Pictures_Users" Association="PoVModel.FK_Pictures_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Picture" EntitySet="Pictures" />
+          </AssociationSet>
+          <EntitySet Name="PushContacts" EntityType="PoVModel.PushContact" />
+          <AssociationSet Name="FK_PushContact_Users" Association="PoVModel.FK_PushContact_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="PushContact" EntitySet="PushContacts" />
+          </AssociationSet>
+          <EntitySet Name="Tokens" EntityType="PoVModel.Token" />
+          <AssociationSet Name="FK_Tokens_Users" Association="PoVModel.FK_Tokens_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Token" EntitySet="Tokens" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Available">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="start" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="end" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="User" Relationship="PoVModel.FK_Available_Users" FromRole="Available" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="role" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="account" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="email_message" Type="Boolean" Nullable="false" />
+          <Property Name="text_message" Type="Boolean" Nullable="false" />
+          <Property Name="app_message" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Availables" Relationship="PoVModel.FK_Available_Users" FromRole="Users" ToRole="Available" />
+          <NavigationProperty Name="Pictures" Relationship="PoVModel.FK_Pictures_Users" FromRole="User" ToRole="Picture" />
+          <NavigationProperty Name="PushContacts" Relationship="PoVModel.FK_PushContact_Users" FromRole="User" ToRole="PushContact" />
+          <Property Type="Boolean" Name="changed" Nullable="false" />
+          <NavigationProperty Name="Tokens" Relationship="PoVModel.FK_Tokens_Users" FromRole="User" ToRole="Token" />
+        </EntityType>
+        <Association Name="FK_Available_Users">
+          <End Role="Users" Type="PoVModel.User" Multiplicity="1" />
+          <End Role="Available" Type="PoVModel.Available" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Available">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Picture">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Binary" Name="bytes" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Type="Int32" Name="user_id" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="PoVModel.FK_Pictures_Users" FromRole="Picture" ToRole="User" />
+          <Property Type="Binary" Name="half_size" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_Pictures_Users">
+          <End Type="PoVModel.User" Role="User" Multiplicity="1" />
+          <End Type="PoVModel.Picture" Role="Picture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Picture">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PushContact">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="Int32" Name="user_id" Nullable="false" />
+          <Property Type="String" Name="phone_uri" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="phone" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="User" Relationship="PoVModel.FK_PushContact_Users" FromRole="PushContact" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_PushContact_Users">
+          <End Type="PoVModel.User" Role="User" Multiplicity="1" />
+          <End Type="PoVModel.PushContact" Role="PushContact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PushContact">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Token">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="Int32" Name="user_id" Nullable="false" />
+          <Property Type="String" Name="public_key" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="expires" Nullable="false" annotation:StoreGeneratedPattern="None" Precision="7" />
+          <Property Type="String" Name="auth_token" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="User" Relationship="PoVModel.FK_Tokens_Users" FromRole="Token" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Tokens_Users">
+          <End Type="PoVModel.User" Role="User" Multiplicity="1" />
+          <End Type="PoVModel.Token" Role="Token" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Token">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PoVModelStoreContainer" CdmEntityContainer="PoVEntities">
+          <EntitySetMapping Name="Availables">
+            <EntityTypeMapping TypeName="PoVModel.Available">
+              <MappingFragment StoreEntitySet="Available">
+                <ScalarProperty Name="start" ColumnName="start" />
+                <ScalarProperty Name="end" ColumnName="end" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="PoVModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="changed" ColumnName="changed" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="role" ColumnName="role" />
+                <ScalarProperty Name="account" ColumnName="account" />
+                <ScalarProperty Name="email_message" ColumnName="email_message" />
+                <ScalarProperty Name="text_message" ColumnName="text_message" />
+                <ScalarProperty Name="app_message" ColumnName="app_message" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pictures">
+            <EntityTypeMapping TypeName="PoVModel.Picture">
+              <MappingFragment StoreEntitySet="Pictures">
+                <ScalarProperty Name="half_size" ColumnName="half_size" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="bytes" ColumnName="bytes" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PushContacts">
+            <EntityTypeMapping TypeName="PoVModel.PushContact">
+              <MappingFragment StoreEntitySet="PushContact">
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="phone_uri" ColumnName="phone_uri" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tokens">
+            <EntityTypeMapping TypeName="PoVModel.Token">
+              <MappingFragment StoreEntitySet="Tokens">
+                <ScalarProperty Name="auth_token" ColumnName="auth_token" />
+                <ScalarProperty Name="expires" ColumnName="expires" />
+                <ScalarProperty Name="public_key" ColumnName="public_key" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

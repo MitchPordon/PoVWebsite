@@ -1,0 +1,14 @@
+﻿@model List<PoVWebsite.Models.Picture>
+@{
+ foreach(PoVWebsite.Models.Picture p in Model){
+     System.Drawing.Image image = new System.Drawing.Bitmap("C:\\inetpub\\wwwroot\\pov.jschroed.com\\UserImages\\" + p.User.username + "\\" + p.id + ".jpg");
+     System.Drawing.Image imageLrg = new System.Drawing.Bitmap("C:\\inetpub\\wwwroot\\pov.jschroed.com\\UserImages\\" + p.User.username + "\\" + p.id + "_Lrg.jpg");
+     System.Drawing.Image imageMed = new System.Drawing.Bitmap("C:\\inetpub\\wwwroot\\pov.jschroed.com\\UserImages\\" + p.User.username + "\\" + p.id + "_Med.jpg");
+     System.Drawing.Image imageSml = new System.Drawing.Bitmap("C:\\inetpub\\wwwroot\\pov.jschroed.com\\UserImages\\" + p.User.username + "\\" + p.id + "_Sml.jpg");
+     <img src ="http://pov.jschroed.com\UserImages\@p.User.username\@p.id@{}.jpg" width="450" height="450" style="position:relative; float:left;" />
+    <img src ="http://pov.jschroed.com\UserImages\@p.User.username\@p.id@{}_Lrg.jpg" width="@imageLrg.Width" height="@imageLrg.Height"  style="position:relative; float:left;"/>
+    <img src ="http://pov.jschroed.com\UserImages\@p.User.username\@p.id@{}_Med.jpg" width="@imageMed.Width" height="@imageMed.Height" style="position:relative; float:left;"/>
+    <img src ="http://pov.jschroed.com\UserImages\@p.User.username\@p.id@{}_Sml.jpg" width="@imageSml.Width" height="@imageSml.Height" style="position:relative; float:left;"/>
+ }
+}
+<p>test</p>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="21dfdbc9a4224abc84bb04657abc9e9b" Name="Diagram1">
+        <EntityTypeShape EntityType="PoVModel.Available" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PoVModel.User" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="PoVModel.FK_Available_Users" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="PoVModel.Picture" Width="1.5" PointX="0.875" PointY="4.5" />
+        <AssociationConnector Association="PoVModel.FK_Pictures_Users" />
+        <EntityTypeShape EntityType="PoVModel.PushContact" Width="1.5" PointX="0.027151504544146131" PointY="6.6565588296654443" />
+        <AssociationConnector Association="PoVModel.FK_PushContact_Users" />
+        <EntityTypeShape EntityType="PoVModel.Token" Width="1.5" PointX="3.625" PointY="4.125" />
+        <AssociationConnector Association="PoVModel.FK_Tokens_Users" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,13 @@
+﻿@model PoVWebsite.Models.User
+@if (!Request.IsAuthenticated)
+{
+    @Html.Partial("_LogOnPartial")
+}
+else
+{
+    @PoVWebsite.Content.Utility.Availability.TodaysAvailability(Model)
+    <br />
+    @Html.ActionLink("Add Availability", "Available", "User")
+
+    
+}

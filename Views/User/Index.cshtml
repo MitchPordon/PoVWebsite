@@ -1,0 +1,82 @@
+﻿
+@model PoVWebsite.Models.User
+@{
+    ViewBag.Title = "Panel";
+    Layout = "~/Views/Shared/_UserControll_Layout.cshtml";
+}
+<div id="menu">
+<h1><span id="info" class="button" style="float:left;">Info</span>        <span id="pass" class="button">Password</span>        <span id="contact" class="button" style ="float:right;">Contact</span></h1>
+</div>
+
+<h2>Panel</h2>
+<div id="info_content" class="content active" style="display:initial;">
+    <br />
+    
+    @Html.LabelFor(m=>m.username)
+    @Html.TextBoxFor(m=>m.username)
+    <br />
+    @Html.Label("Account Type:")
+    @Html.TextBoxFor(m=>m.account)
+ 
+</div>
+<div id="pass_content" class="content">
+    <br />
+    @using (Html.BeginForm("updatePassword", "User", FormMethod.Post))
+    {
+        @Html.ValidationSummary(true)
+        <fieldset>
+            <legend>Change Password</legend>
+            @Html.Label("New Password:")
+            @Html.PasswordFor(m=>m.password)
+            <br />
+            @Html.Label("Confirm password: ")
+            @Html.Password("confirm_pass", "Confirm", new { onblur = "comparePasswords()", onchange="comparePasswords()" })
+            <span id="pass_error" class="error"></span>
+            <br />
+            @Html.Label("Security questions will be stated here:")
+            <br />
+            @Html.TextBox("sq", "Answer Security Question");
+            @Html.ValidationMessage("sq");
+            <br />
+            <input type="submit" value="Change Password" />
+
+
+        </fieldset>
+    }
+    <br />
+    @using(Html.BeginForm())
+    {
+        <fieldset>
+            <legend>Change Security Question</legend>
+            @Html.Label("Drop down of possible questions:")
+            <br />
+            @Html.TextBox("Answer Question")
+            <br />
+            @Html.Label("Password: ")
+            @Html.Password("Password")
+
+        </fieldset>
+    }
+
+</div>
+
+<div id="contact_content" class="content">
+    <br />
+    @Html.Label("Receive Text Messages: ")
+    @Html.CheckBoxFor(m=>m.text_message)
+    
+     <br />
+
+    @Html.Label("Receive E-mail Messages: ")
+    @Html.CheckBoxFor(m=>m.email_message)
+    <span style="padding-right:30px;"> </span>
+    @Html.Label("Email: ")
+    @Html.TextBoxFor(m=>m.email)
+    <br />
+    @Html.Label("Receive App Messages: ")
+    @Html.CheckBoxFor(m=>m.app_message)
+    <br />
+
+</div>
+
+

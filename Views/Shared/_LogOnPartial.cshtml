@@ -1,0 +1,35 @@
+﻿
+@model PoVWebsite.Models.User
+    <span class="Login_Error">menu</span>
+<br />
+<!--
+    @using (Html.BeginForm("LogIn", "Account"))
+
+     {
+         
+        
+        @Html.ValidationSummary(true)
+        @Html.Label("Username:")
+        @Html.TextBox("username")
+        @Html.ValidationMessage("user")
+        <br />
+        @Html.Label("Password:")
+        @Html.Password("password")
+        @Html.ValidationMessage("pass")
+    
+         <input type="submit" value="Log In" class="login"/>
+     }
+    -->
+    
+        Username: 
+        <input id="username" type="text" />
+        <br />
+        Password:
+        <input id="password" type="password" />
+        <br />
+        <button class="login">Log In</button>
+
+
+
+     <br />
+    @Html.ActionLink("Register", "Register", "Account");

@@ -1,0 +1,33 @@
+﻿
+
+@{
+    ViewBag.Title = "Test";
+}
+    
+@section ScriptsForHead{
+    <link href="~/Content/jquery.calendar.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/jquery.calendar.js" type="text/javascript"></script>
+    <script>
+        var onSuccess = function (data) {
+            alert(data);
+            var test = data[0];
+            alert(test);
+            var blkstr = [];
+            $.each(test, function (idx2, val2) {
+                var str = idx2 + ":" + val2;
+                blkstr.push(str);
+            });
+            alert(blkstr);
+            var arr = JSON.parse(blkstr);
+        };
+
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:62427/User/test',
+            success: function (data) { onSuccess(data); },
+            traditional: true
+        });
+    </script>
+}
+
+<h2>Test</h2>

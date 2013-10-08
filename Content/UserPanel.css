@@ -1,0 +1,47 @@
+﻿
+#side_menu_shell {
+    min-width:30%;
+}
+
+#side_contents {
+    visibility:visible;
+}
+
+#body {
+    min-width:70%; 
+    max-width:70%;
+    padding-top:50px;
+    text-align:center;
+}
+
+#menu {
+    position:fixed;
+    min-width:70%;
+    background-color:white;
+}
+    #menu h1 {
+        margin-left:15%;
+        margin-right:15%;
+
+        
+    }
+#info_content {
+    
+}
+
+#pass_content {
+    
+}
+
+#contact_content {
+    
+}
+.content {
+    padding-top:12px;
+    display:none;
+}
+.active {
+    display:initial;
+}
+
+
