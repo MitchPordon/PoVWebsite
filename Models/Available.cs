@@ -18,6 +18,7 @@ namespace PoVWebsite.Models
         public System.DateTime end { get; set; }
         public int user_id { get; set; }
         public int id { get; set; }
+        public Nullable<DateTime> added { get; set; }
     
         public virtual User User { get; set; }
     }

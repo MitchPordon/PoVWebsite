@@ -12,7 +12,7 @@ namespace PoVWebsite.Content.Utility
         private static string _privateKey = "<RSAKeyValue><Modulus>txRzokDZOvlv3sOJ4Nym2w8Wm1kFc4fMKKdLrbLqY1aXyjyX2LsIxfCjlKp4NfkNL5oqab1TTvv5qDMz5gN0/7l5iBueCTmlnGyVJNh7JURO0jrKpu2EQaL7sxdUY/i+H9cDa+zZn1UNZeas8nT6cxfv0isU0NrBg1WMklwx3DU=</Modulus><Exponent>AQAB</Exponent><P>8CplGsPdUUmqPLByJf2ekCsUX5ws+ePTtvRgn/BpwtmCHuvsr5ffIVY1VxU4fm/pEsSC3bZJmcbFmzxFUHi6ZQ==</P><Q>wyaK65Ng/cuROD6a+Ig5h9JGTSXWSZOUG4eZhp2mO7nfTKyc4hRLAhURx4+E3xg3FzoHJ9RDHdwmLVQygw4VkQ==</Q><DP>NqVu2+g1M4nPcn+zeXF74tHqkNa4ZSOxyK9STRIm/m7/bInCETI9UxiKioYJlLtiDSMpo8kWdicET44nN2hBAQ==</DP><DQ>mc+ZEs/YVHDMBq6hal3EKl77dfbqjJc61u/re4Rp7w0zCLXL+QzRidSdbNKbgVMOqMndtfDA7ZoEpRmFrnG9YQ==</DQ><InverseQ>yLCF1Wcv1KSzTDTpfxZVII7STNvoMFKsDZJSeRXHQtJzsLT8Zb6Glx5baPZh/NsEFaH7r9AY+lIs/WtQjqoMbA==</InverseQ><D>AtYhXQ7spccQuDk8KmAqkC5yaaJY3RRjKqn234Bd0VTnwb5Wauy4AwzYop+KDtvKMWz4c4c3aZFGqeZEEoyGcLDAH/poodhaGzxEx819uiGcc55teR2pNSRd2G9s+6Neq8YxU5kuiPn66NXmQ8Oks/0pI/aYQ3+Yy2Cu4xzojxE=</D></RSAKeyValue>";
         internal static string _publicKey = " <RSAKeyValue><Modulus>txRzokDZOvlv3sOJ4Nym2w8Wm1kFc4fMKKdLrbLqY1aXyjyX2LsIxfCjlKp4NfkNL5oqab1TTvv5qDMz5gN0/7l5iBueCTmlnGyVJNh7JURO0jrKpu2EQaL7sxdUY/i+H9cDa+zZn1UNZeas8nT6cxfv0isU0NrBg1WMklwx3DU=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>";
         private static UnicodeEncoding _encoder = new UnicodeEncoding();
-        private static HMAC _hash = HMACSHA512.Create();
+        private static HMAC _hash = new HMACSHA256();
         private static RandomNumberGenerator _rng = RNGCryptoServiceProvider.Create();
         
 

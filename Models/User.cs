@@ -9,6 +9,7 @@
 
 namespace PoVWebsite.Models
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     
@@ -32,10 +33,16 @@ namespace PoVWebsite.Models
         public bool text_message { get; set; }
         public bool app_message { get; set; }
         public bool changed { get; set; }
-    
+        public DateTime last_Mod { get; set; }
+        public DateTime last_Avail_Mod { get; set; }
+
+        [JsonIgnore]
         public virtual ICollection<Available> Availables { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Picture> Pictures { get; set; }
+        [JsonIgnore]
         public virtual ICollection<PushContact> PushContacts { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Token> Tokens { get; set; }
     }
 }

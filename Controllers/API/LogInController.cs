@@ -9,28 +9,14 @@ using PoVWebsite.Models;
 using System.Web.Security;
 using System.Drawing;
 using System.Web;
+using System.Threading.Tasks;
+using System.IO;
+using System.Data;
 
 namespace PoVWebsite.Controllers.API
 {
     public class LogInController : ApiController
     {
-
-        public bool GetLogIn(string username, string password)
-        {
-            PoVEntities db = new PoVEntities();
-            User match = db.Users.SingleOrDefault(m => m.username.Equals(username));
-            if (match != null)
-            {
-                if (match.password.Equals(password)) //Success
-                {
-                    FormsAuthentication.SetAuthCookie(match.username, false);
-                    //return new HttpResponseMessage(HttpStatusCode.OK);
-                    return true;
-                }
-            }
-            //return new HttpResponseMessage(HttpStatusCode.BadRequest);
-            return false;
-        }
 
         public HttpResponseMessage PostLogIn(string username, string password)
         {
@@ -56,39 +42,79 @@ namespace PoVWebsite.Controllers.API
             return resp;
         }
 
-        public HttpResponseMessage GetTest()
+        public async Task<HttpResponseMessage> PostLogIn2(string username)
         {
-            HttpResponseMessage resp = new HttpResponseMessage(HttpStatusCode.OK);
-            try
+            PoVEntities db = new PoVEntities();
+            string appKey, blob, data;
+            if (!Request.Headers.Contains("appKey") && Request.Headers.GetValues("appKey")!= null)
             {
-                //HttpCookie cookie = HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName];
-                //HttpCookie cookie2 = HttpContext.Current.Request.Cookies[0];
-                //resp.Content = new StringContent(cookie.Value);
-                if (!User.Identity.IsAuthenticated)
+                HttpResponseMessage resp = new HttpResponseMessage(HttpStatusCode.ExpectationFailed);
+                resp.ReasonPhrase = "Missing the app key";
+                return resp;
+            }
+            appKey = Convert.ToString(Request.Headers.GetValues("appKey").FirstOrDefault());
+            using (StreamReader sr = new StreamReader(await Request.Content.ReadAsStreamAsync()))
+            {
+                blob = await sr.ReadLineAsync();
+                data = await sr.ReadLineAsync();
+            }
+            if(blob == null || data==null)
+            {
+                HttpResponseMessage resp = new HttpResponseMessage(HttpStatusCode.ExpectationFailed);
+                resp.ReasonPhrase = "Missing required data";
+                return resp;
+            }
+            string param = PoVWebsite.Content.Utility.RSAClient.Decrypt(data);
+            if(!param.Contains('=')){
+                HttpResponseMessage resp = new HttpResponseMessage(HttpStatusCode.ExpectationFailed);
+                resp.ReasonPhrase = "Data in invalid format";
+                return resp;
+            }
+            string password = param.Split(new char[] { '=' })[1];
+            string hashedData = PoVWebsite.Content.Utility.RSAClient.Hash(param + "&username=" + username);
+            if (hashedData.Equals(blob))
+            {
+                User match = db.Users.SingleOrDefault(m => (m.username.Equals(username) && m.password.Equals(password)));
+                if (match == null)
                 {
-                    resp.StatusCode = HttpStatusCode.BadRequest;
-                    resp.Content = new StringContent("didnt work");
+                    HttpResponseMessage resp = new HttpResponseMessage(HttpStatusCode.Forbidden);
+                    resp.ReasonPhrase = "Username/Password incorrect";
+                    return resp;
                 }
                 else
                 {
+                    string token = PoVWebsite.Content.Utility.RSAClient.NewToken();
+                    Token existingToken = match.Tokens.SingleOrDefault(m => m.public_key.Equals(appKey));
+                    if (existingToken != null)
+                    {
+                        existingToken.auth_token = token;
+                        existingToken.expires = DateTime.Now;
+                        db.Entry(existingToken).State = EntityState.Modified;
+                        db.SaveChanges();
 
-                    resp.Content = new StringContent(User.Identity.Name);
+                    }
+                    else
+                    {
+                        Token newToken = new Token { user_id = match.id, public_key = appKey, User = match, auth_token = token };
+                        newToken.expires = DateTime.UtcNow;
+                        db.Tokens.Add(newToken);
+                        db.SaveChanges();
+                    }
+                    HttpResponseMessage resp = new HttpResponseMessage(HttpStatusCode.OK);
+                    resp.ReasonPhrase = "Login Successful";
+                    resp.Headers.Add("authToken", token);
+                    resp.Content = new StringContent("userID=" + match.id);
+                    return resp;
                 }
-                return resp;
-
             }
-            catch
+            else
             {
-                resp.StatusCode = HttpStatusCode.BadGateway;
+                HttpResponseMessage resp = new HttpResponseMessage(HttpStatusCode.ExpectationFailed);
+                resp.ReasonPhrase = "Incorrect information";
                 return resp;
             }
 
-        }
-
-        public HttpResponseMessage GetTest2()
-        {
-            HttpResponseMessage resp = new HttpResponseMessage(HttpStatusCode.OK);
-            return resp;
+                
         }
 
     }

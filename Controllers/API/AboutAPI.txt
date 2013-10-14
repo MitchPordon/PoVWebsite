@@ -1,0 +1,18 @@
+﻿Log in call must be in the following format
+Header:
+	1.)The public App Key
+Content:
+	Line 1- Blob of hashed data
+	Line 2- Secure Data encrypted with the POV public key
+The Blob- The blob is a hashed collection of all the parameters. It is hashed using the apps private key. The parameters will be in the following order
+		Parameters:
+			1.)Pre-Encrypted parameters
+			2.)unencrypted parameters transfered in the URL
+			-There should be no leading '?' charecter and no quotes. 
+			-The server will Hash the paramerters in this order and compare that hash to the blob. If the parameters are hashed in a different order client side it will result in a failed log in attempt
+The call will return an auth token in a header called "authToken"
+
+Each call will require the following headers:
+1.) The user id obtained from the first log in call
+2.) Authorization Token obtained from the log in call. This token should be hashed with the app key prior to sending the request
+3.) The public App Key

@@ -36,6 +36,7 @@
           <Property Name="end" Type="smalldatetime" Nullable="false" />
           <Property Name="user_id" Type="int" Nullable="false" />
           <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="added" Type="datetime2" />
         </EntityType>
         <EntityType Name="Pictures">
           <Key>
@@ -62,7 +63,7 @@
           <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="user_id" Type="int" Nullable="false" />
           <Property Name="public_key" Type="varchar(max)" Nullable="false" />
-          <Property Name="expires" Type="datetime2" Nullable="false" StoreGeneratedPattern="None" />
+          <Property Name="expires" Type="datetime2" Nullable="false" />
           <Property Name="auth_token" Type="varchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
@@ -79,6 +80,8 @@
           <Property Name="text_message" Type="bit" Nullable="false" />
           <Property Name="app_message" Type="bit" Nullable="false" />
           <Property Name="changed" Type="bit" Nullable="false" />
+          <Property Name="last_Mod" Type="datetime2" />
+          <Property Name="last_Avail_Mod" Type="datetime2" />
         </EntityType>
         <Association Name="FK_Available_Users">
           <End Role="Users" Type="PoVModel.Store.Users" Multiplicity="1" />
@@ -164,6 +167,7 @@
           <Property Name="user_id" Type="Int32" Nullable="false" />
           <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="User" Relationship="PoVModel.FK_Available_Users" FromRole="Available" ToRole="Users" />
+          <Property Type="DateTime" Name="added" Precision="7" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -183,6 +187,8 @@
           <NavigationProperty Name="PushContacts" Relationship="PoVModel.FK_PushContact_Users" FromRole="User" ToRole="PushContact" />
           <Property Type="Boolean" Name="changed" Nullable="false" />
           <NavigationProperty Name="Tokens" Relationship="PoVModel.FK_Tokens_Users" FromRole="User" ToRole="Token" />
+          <Property Type="DateTime" Name="last_Mod" Precision="7" />
+          <Property Type="DateTime" Name="last_Avail_Mod" Precision="7" />
         </EntityType>
         <Association Name="FK_Available_Users">
           <End Role="Users" Type="PoVModel.User" Multiplicity="1" />
@@ -272,6 +278,7 @@
           <EntitySetMapping Name="Availables">
             <EntityTypeMapping TypeName="PoVModel.Available">
               <MappingFragment StoreEntitySet="Available">
+                <ScalarProperty Name="added" ColumnName="added" />
                 <ScalarProperty Name="start" ColumnName="start" />
                 <ScalarProperty Name="end" ColumnName="end" />
                 <ScalarProperty Name="user_id" ColumnName="user_id" />
@@ -282,6 +289,8 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="PoVModel.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="last_Avail_Mod" ColumnName="last_Avail_Mod" />
+                <ScalarProperty Name="last_Mod" ColumnName="last_Mod" />
                 <ScalarProperty Name="changed" ColumnName="changed" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="username" ColumnName="username" />

@@ -18,7 +18,7 @@ namespace PoVWebsite.Filters
             
             if(filterContext.Request.Headers.Contains("authToken") && filterContext.Request.Headers.GetValues("authToken") != null)
             {
-                string authToken = Convert.ToString(filterContext.Request.Headers.GetValues("authToken").FirstOrDefault());
+                string authToken = Convert.ToString(filterContext.Request.Headers.GetValues("authToken").FirstOrDefault()); //Auth token will be hashed client side
                 if (filterContext.Request.Headers.Contains("id") && filterContext.Request.Headers.GetValues("id") != null)
                 {
                     int userID;
@@ -28,7 +28,11 @@ namespace PoVWebsite.Filters
                         {
                             string appKey = filterContext.Request.Headers.GetValues("appKey").FirstOrDefault();
                             Token token = db.Tokens.SingleOrDefault(m => (m.public_key.Equals(appKey) && m.user_id == userID));
-                            string hashedToken = Content.Utility.RSAClient.Hash(token.auth_token);
+                            string hashedToken = Content.Utility.RSAClient.Hash(token.auth_token); //Compare the two hashes
+                            if(hashedToken.Equals(authToken))
+                                return;
+                            filterContext.Response = filterContext.Request.CreateResponse(HttpStatusCode.ExpectationFailed);
+                            filterContext.Response.ReasonPhrase = "Invalid Auth Token";
                             return;
                         }
                         filterContext.Response = filterContext.Request.CreateResponse(HttpStatusCode.ExpectationFailed);

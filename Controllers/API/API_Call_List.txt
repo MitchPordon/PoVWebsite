@@ -1,0 +1,63 @@
+﻿AvailabilityController
+	GetAvailabilities(string username, string password)
+		Returns a string containing all the availabilities
+		Waiting for removal
+	Get(string lastChecked)
+		Returns all availabilities that were added after the Date contained in "lastChecked"
+		Three posible returns
+			Full collection of availabilities(Status Code : OK)
+			Partial Collection(Status Code : PartialContent)
+			Nothing(Status Code : NoContent)
+		Uses the standard authentication format
+	 PostAvailabilities(string username, string password)
+		Currently depreciated
+		Will be changed to support the updating of Availabilities from the app
+		Uses the standard authentication format
+ImageController
+	PostImage(string username, string password, int userID)
+		Returns a boolean if successful or not
+		Needs the following updates
+			Use of the standard authentication format
+			More detailed response
+	GetImage()
+		Test controller
+		Not sure of its intended purpose
+		Check for removal
+LogInController
+	PostLogIn(string username, string password)
+		Depreciated
+		Will be removed after app is updated
+	PostLogIn2(string username)
+		Name will be changed after removal of "PostLogIn"
+		Updates or Creates an auth token
+		Returns the auth token in the "authToken" header
+		Returns the associated User ID in the content
+UserController
+	Get(string lastUpdated)
+		Two possible return types
+			The User info if the "last_Mod" date is after the "lastUpdated" date(Status Code : OK)
+			Nothing if the "lastUpdated" date is after the "last_Mod" date(Status Code : NoContent)
+		Follows the standard authentication format
+	Post(string username, string password, int id)
+		Returns the User object
+		Depreciated
+		Will be removed when app is updated
+	PostAvailability(string username, string password, int dayRange = 7)
+		Will be removed after app is checked for usage
+	PostSubmitPushURI(string username, string password, string phone, int userID, string url)
+		Need the following updates
+			Use of standard authentication format
+			Secure paramaters
+	PostSubmitPushURI2(string phone, string url)
+		Will be renamed once "PostSubmitPushURI" is removed
+		Follows standard authentication format
+		No paramaters in the content of the request
+		Parameter "url" is encrypted with the PoV public key
+		Returns:
+			Empty if the push URI was current(Status Code : NoContent)
+			"Push Updated" if the URI's veried(Status Code : OK)
+			"Push Added" if no push for the phone/app existed(Status Code : OK)
+			"Error on Server"(Status Code : Conflict)
+
+
+	

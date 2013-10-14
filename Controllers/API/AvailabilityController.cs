@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Security;
 using PoVWebsite.Models;
+using PoVWebsite.Filters;
 
 namespace PoVWebsite.Controllers.API
 {
@@ -14,6 +15,7 @@ namespace PoVWebsite.Controllers.API
     {
         
         PoVEntities db = new PoVEntities();
+        //Verify for removal
         public string GetAvailabilities(string username, string password)
         {
            
@@ -31,10 +33,39 @@ namespace PoVWebsite.Controllers.API
 
         }
 
+        [TokenFilter]
+        public HttpResponseMessage Get(string lastChecked)
+        {
+            DateTime LastChecked;
+            if (!DateTime.TryParse(lastChecked, out LastChecked))
+            {
+                var resp = Request.CreateResponse(HttpStatusCode.ExpectationFailed);
+                resp.ReasonPhrase = "Invalid Date Format";
+                return resp;
+            }
+            int id = int.Parse(Request.Headers.GetValues("id").FirstOrDefault());
+            User user = db.Users.SingleOrDefault(m => m.id == id);
+            List<Available> newAvailability = user.Availables.Where(m=>m.added > LastChecked).ToList();
+            if (newAvailability == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NoContent);
+            }
+            else if (newAvailability.Count < user.Availables.Count)
+            {
+                return Request.CreateResponse(HttpStatusCode.PartialContent, newAvailability);
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, newAvailability);
+            }
+        }
+
+        [TokenFilter]
         public string PostAvailabilities(string username, string password)
         {
+            int userID = int.Parse(Request.Headers.GetValues("id").FirstOrDefault());
             string response = "";
-            User user = db.Users.SingleOrDefault(m => (m.username.Equals(username) && m.password.Equals(password)));
+            User user = db.Users.SingleOrDefault(m => m.id==userID);
             if (user != null)
             {
                 foreach (Available a in user.Availables)

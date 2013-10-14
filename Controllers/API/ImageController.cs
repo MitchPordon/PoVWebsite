@@ -39,27 +39,5 @@ namespace PoVWebsite.Controllers.API
             return response;
         }
 
-        public bool PostTest(int i)
-        {
-            
-            /*
-            Task<byte[]> t = requestContent.ReadAsByteArrayAsync();
-            t.Wait();
-            byte[] streamData = t.Result;
-            db.Pictures.Add(new Picture { bytes = streamData });
-            db.SaveChanges();
-            string result = "";
-            foreach (byte b in streamData)
-            {
-                result += b + " ";
-            }
-             * */
-            //return result;
-
-               return false;
-               
-            
-        }
-
     }
 }

@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Web.Http;
 using PoVWebsite.Models;
 using PoVWebsite.Content.Utility;
+using System.Web;
+using PoVWebsite.Filters;
 
 namespace PoVWebsite.Controllers.API
 {
@@ -14,10 +16,23 @@ namespace PoVWebsite.Controllers.API
         PoVEntities db = new PoVEntities();
 
         // GET api/user/5
-        public User Get(int id)
+        [TokenFilter]
+        public HttpResponseMessage Get(string lastUpdated)
         {
+            int id = int.Parse(Request.Headers.GetValues("id").FirstOrDefault());
+            DateTime LastUpdated;
+            if (!DateTime.TryParse(lastUpdated, out LastUpdated))
+            {
+                HttpResponseMessage resp = Request.CreateResponse(HttpStatusCode.ExpectationFailed);
+                resp.ReasonPhrase = "Invalid Date Format";
+                return resp;
+            }
             User user = db.Users.SingleOrDefault(m => m.id == id);
-            return user;
+            if (user.last_Mod <= LastUpdated)
+                return Request.CreateResponse(HttpStatusCode.NoContent);
+            return Request.CreateResponse(HttpStatusCode.OK, db.Users.SingleOrDefault(m => m.id == id));
+
+
         }
 
         public User Post(string username, string password, int id)
@@ -35,10 +50,6 @@ namespace PoVWebsite.Controllers.API
         {
             User user = db.Users.SingleOrDefault(m => (m.username.Equals(username) && m.password.Equals(password)));
             return user.Availables.Where(m => m.start.DayOfYear >= DateTime.Now.DayOfYear - dayRange);
-        }
-        // POST api/user
-        public void Post([FromBody]string value)
-        {
         }
 
         public HttpResponseMessage PostSubmitPushURI(string username, string password, string phone, int userID, string url)
@@ -68,7 +79,7 @@ namespace PoVWebsite.Controllers.API
                     resp.Content = new StringContent("Push data added");
                     return resp;
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     resp.StatusCode = HttpStatusCode.Conflict;
                     resp.Content = new StringContent("Could not save or update database.");
@@ -78,6 +89,42 @@ namespace PoVWebsite.Controllers.API
             resp.StatusCode = HttpStatusCode.Forbidden;
             resp.Content = new StringContent("Invalid username or password");
             return resp;
+        }
+
+        [TokenFilter]
+        public HttpResponseMessage PostSubmitPushURI2(string phone, string url)
+        {
+            int id = int.Parse(Request.Headers.GetValues("id").FirstOrDefault());
+            url = PoVWebsite.Content.Utility.RSAClient.Decrypt(url);
+            HttpResponseMessage resp = new HttpResponseMessage();
+            try
+            {
+                PushContact existingPush = db.PushContacts.SingleOrDefault(m => (m.user_id == id && m.phone.Equals(phone, StringComparison.CurrentCultureIgnoreCase)));
+                if (existingPush != null)
+                {
+                    if (existingPush.phone_uri.Equals(url, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        resp.StatusCode = HttpStatusCode.NoContent;
+                        return resp;
+                    }
+                    existingPush.phone_uri = url;
+                    db.SaveChanges();
+                    resp.StatusCode = HttpStatusCode.OK;
+                    resp.Content = new StringContent("Push data updated");
+                    return resp;
+                }
+                db.PushContacts.Add(new PushContact { user_id = id, phone = phone, phone_uri = url });
+                db.SaveChanges();
+                resp.StatusCode = HttpStatusCode.OK;
+                resp.Content = new StringContent("Push data added");
+                return resp;
+            }
+            catch (Exception e)
+            {
+                resp.StatusCode = HttpStatusCode.Conflict;
+                resp.Content = new StringContent("Could not save or update database.");
+                return resp;
+            }
         }
     }
 }
